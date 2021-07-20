@@ -1,6 +1,7 @@
 // get local time/date
-var today = moment().format("ddd, MMMM Do");
-
+var today = moment().format("ddd, MMMM Do h:mma");
+var now = moment().format("H");
+console.log(now);
 //display local time in jumbotron
 $("#currentDay").html(today);
 
@@ -15,6 +16,7 @@ var memos = [
   { hour: "14", memo: "" },
   { hour: "15", memo: "" },
   { hour: "16", memo: "" },
+  { hour: "17", memo: "" },
 ];
 
 function retrieveMemos() {
@@ -22,6 +24,15 @@ function retrieveMemos() {
   if (storedMemos !== null) {
     memos = storedMemos;
   }
+  displayMemos();
+}
+
+retrieveMemos();
+
+function displayMemos() {
+  $(".description").each(function (i) {
+    $(this).val(memos[i].memo);
+  });
 }
 
 //listen for click on save icon
@@ -31,8 +42,9 @@ $(".btn").on("click", function () {
   var memo = $(this).siblings(".description").val();
   memos[hour - 8].memo = memo;
   localStorage.setItem("memos", JSON.stringify(memos));
+  displayMemos();
 });
 
 //compare current hour to hour in schedule and
 // change color based on past, present, future
-$(".timeBlock");
+$(".timeBlock").each(function () {});

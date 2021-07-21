@@ -1,6 +1,6 @@
 // get local time/date
-var today = moment().format("ddd, MMMM Do h:mm:ss a");
-var now = moment().hour();
+var today = moment().format("ddd, MMMM Do h:mm a");
+
 //display local time in jumbotron
 $("#currentDay").html(today);
 
@@ -18,24 +18,28 @@ var memos = [
   { hour: "17", memo: "" },
 ];
 
+//waits until document is ready and starts contained functions
 $(document).ready(function () {
+  //updates time in jumbotron div every 10 seconds and calls function to check/change time slot colors
   function refreshTime() {
     setInterval(function () {
       $("#currentDay").html(moment().format("ddd, MMMM Do h:mm:ss a"));
-      console.log("a");
       timeCheck();
-    }, 1000);
+    }, 10000);
   }
 
   //retrieve/combine data from local storage
   function retrieveMemos() {
+    //gets any notes stored in local memory
     var storedMemos = JSON.parse(localStorage.getItem("memos"));
+    //if there are locally stored notes, copies them to global variable
     if (storedMemos !== null) {
       memos = storedMemos;
     }
     displayMemos();
   }
 
+  //goes through all time slots and adds memo if found in local storage
   function displayMemos() {
     $(".description").each(function (i) {
       $(this).val(memos[i].memo);
@@ -45,10 +49,12 @@ $(document).ready(function () {
   //compare current hour to hour in schedule and
   // change color based on past, present, future
   function timeCheck() {
-    $(".timeBlock").each(function (i) {
+    $(".timeBlock").each(function () {
+      //get current hour and time slot id
+      var now = moment().hour();
       var time = parseInt($(this).attr("id"));
-      console.log(now);
-      console.log(time);
+
+      //compares time slot time to current time and changes time slot color
       if (time < now) {
         $(this).addClass("past");
         $(this).removeClass("present");
@@ -62,6 +68,7 @@ $(document).ready(function () {
         $(this).removeClass("present");
         $(this).addClass("future");
       }
+      return;
     });
   }
 
@@ -70,11 +77,12 @@ $(document).ready(function () {
   $(".btn").on("click", function () {
     var hour = $(this).parent().attr("id");
     var memo = $(this).siblings(".description").val();
+    //subtracts 8 to align hours with memos index
     memos[hour - 8].memo = memo;
     localStorage.setItem("memos", JSON.stringify(memos));
   });
 
   retrieveMemos();
-  //   timeCheck();
+  timeCheck();
   refreshTime();
 });

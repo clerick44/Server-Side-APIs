@@ -23,7 +23,7 @@ $(document).ready(function () {
   //updates time in jumbotron div every 10 seconds and calls function to check/change time slot colors
   function refreshTime() {
     setInterval(function () {
-      $("#currentDay").html(moment().format("ddd, MMMM Do h:mm:ss a"));
+      $("#currentDay").html(moment().format("ddd, MMMM Do h:mm a"));
       timeCheck();
     }, 10000);
   }
